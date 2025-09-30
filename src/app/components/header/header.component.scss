@@ -1,0 +1,30 @@
+.header-container {
+  background-color: #121212;
+  color: #eee;
+  padding: 1rem;
+  font-family: 'Inter', sans-serif;
+
+  .margin-right-2rem {
+    margin-right: 2rem;
+  }
+
+  .text-green-400 {
+    color: #4ade80;
+  }
+
+  .text-red-400 {
+    color: #f87171;
+  }
+
+  .text-gray-400 {
+    color: #9ca3af;
+  }
+
+  .text-gray-500 {
+    color: #6b7280;
+  }
+
+  hr {
+    border-color: #374151;
+  }
+}

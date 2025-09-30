@@ -1,0 +1,22 @@
+import { Component, Input } from '@angular/core';
+import { CommonModule, DecimalPipe } from '@angular/common';
+
+@Component({
+  selector: 'app-summary',
+  standalone: true,
+  imports: [CommonModule, DecimalPipe],
+  template: `
+    <div *ngIf="selectedInstrument" class="card p-3 mb-4">
+      <h5>{{ selectedInstrument['name'] }}</h5>
+      <p>Precio: {{ selectedInstrument['value'] | number:'1.2-2' }}</p>
+      <p [class.text-success]="selectedInstrument['change'] >= 0"
+         [class.text-danger]="selectedInstrument['change'] < 0">
+        Cambio: {{ selectedInstrument['change'] | number:'1.2-2' }}%
+      </p>
+      <p>Volumen: {{ selectedInstrument['volume'] | number }}</p>
+    </div>
+  `
+})
+export class SummaryComponent {
+  @Input() selectedInstrument: any;
+}

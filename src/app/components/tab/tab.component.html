@@ -1,0 +1,7 @@
+<button *ngFor="let tab of tabs; let i = index" (click)="selectTab(i)">
+  {{ tab }}
+</button>
+
+<div *ngFor="let content of filteredContent">
+  {{ content }}
+</div>

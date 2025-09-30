@@ -1,0 +1,17 @@
+<div class="chart-wrapper">
+  <div class="chart-container">
+    <p-chart type="line" [data]="chartData()" [options]="chartOptions"></p-chart>
+  </div>
+
+  <div class="period-buttons">
+    <button
+      pButton
+      *ngFor="let period of periods"
+      type="button"
+      (click)="setPeriod(period)"
+      [class.active]="currentPeriod() === period"
+    >
+      {{ period }}
+    </button>
+  </div>
+</div>

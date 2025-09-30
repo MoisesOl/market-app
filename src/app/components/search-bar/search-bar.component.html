@@ -1,0 +1,11 @@
+<div class="search-bar-container">
+  <i class="pi pi-search search-icon"></i>
+  <input
+    type="text"
+    pInputText
+    placeholder="Buscar..."
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="onSearch()"
+    class="search-input"
+  />
+</div>

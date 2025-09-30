@@ -1,0 +1,46 @@
+
+
+.chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%; /* máximo 70% de la pantalla en escritorio */
+  margin-left: 2rem;
+}
+
+.chart-container {
+  width: 100%;
+  flex: 1;
+}
+
+.period-buttons {
+  display: flex;
+  gap: 0; /* botones pegados */
+  margin-top: 0.5rem;
+}
+
+.period-buttons button {
+  width: 60px; /* ancho fijo */
+  border: 1px solid #3b3b3b;
+  background-color: #1f1f1f;
+  color: #eee;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: background-color 0.2s;
+}
+
+.period-buttons button:hover {
+  background-color: #333; /* un poco más claro al hover */
+}
+
+.period-buttons button.active {
+  background-color: #42a5f5;
+  color: #fff;
+}
+
+
+/* Responsive: en móviles ocupa 100% */
+@media (max-width: 1024px) {
+  .chart-wrapper {
+    max-width: 100%;
+  }
+}
