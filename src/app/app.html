@@ -1,3 +1,10 @@
+<!-- Barra de búsqueda fija -->
+<div class="search-bar-wrapper">
+  <app-search-bar
+    (searchChange)="onSearchChange($event)">
+  </app-search-bar>
+</div>
+
 <!-- Header solo si hay instrumento -->
 <div class="header-container">
   <app-header 
@@ -27,7 +34,7 @@
 
 <!-- Contenido de cada índice -->
 <div class="index-content">
-  <app-instrument-list
+  <app-instrument-list #instrumentListRef
     *ngIf="selectedIndex() === 'IPSA'"
     [indexCode]="'IPSA'"
     (instrumentSelected)="onInstrumentSelected($event)">

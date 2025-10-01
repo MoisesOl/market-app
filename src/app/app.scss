@@ -119,6 +119,10 @@
   font-weight: 600;
 }
 
+/* Agregar espacio superior para que la barra fija no tape nada */
+.header-container {
+  padding-top: 4rem; /* ajusta según la altura de tu search-bar */
+}
 
 
 /* Desktop layout */

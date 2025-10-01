@@ -8,7 +8,12 @@
   background-color: #1f1f1f;
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  position: relative;
+
+  position: fixed;      /* se mantiene fija */
+  top: 1rem;            /* separación superior */
+  left: 1rem;           /* alineación horizontal */
+  right: 1rem;          /* ocupa todo el ancho con margen */
+  z-index: 1000;        /* por encima de otros elementos */
 }
 
 .search-icon {
@@ -17,7 +22,7 @@
   top: 50%;
   transform: translateY(-50%);
   color: #999;
-  font-size: 1.2rem;  /* tamaño visible */
+  font-size: 1.2rem;
   pointer-events: none;
 }
 
@@ -28,5 +33,6 @@
   color: #eee;
   outline: none;
   font-size: 1rem;
-  padding-left: 2.5rem; /* espacio para la lupa */
+  padding-left: 2.5rem;
 }
+

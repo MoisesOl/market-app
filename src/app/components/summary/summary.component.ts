@@ -11,10 +11,10 @@ import { TableModule } from 'primeng/table';
   styleUrls: ['./summary.component.scss'],
 })
 export class SummaryComponent implements OnChanges {
-  /** Recibimos el instrumento como signal para reactividad */
+  /** Recibimos el instrumento como input */
   @Input() instrumentSignal: Instrument | null = null;
 
-  /** Signal interna */
+  /** Signal interna para reactividad */
   instrument = signal<Instrument | null>(null);
 
   /** Sincronizamos la signal interna cuando cambia la input */
@@ -34,11 +34,24 @@ export class SummaryComponent implements OnChanges {
     return value; // deja strings tal cual
   }
 
+  /** Formatea la fecha de cotización */
+  formattedDate = computed(() => {
+    const inst = this.instrument();
+    if (!inst?.summary.datetimeLastPrice) return 'N/A';
+    const date = new Date(inst.summary.datetimeLastPrice);
+    return date.toLocaleDateString('es-CL', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  });
+
   /** Datos de mercado */
   marketData = computed(() => {
     const inst = this.instrument();
     if (!inst) return [];
     return [
+      { label: 'Fecha cotización', value: this.formattedDate() },
       { label: 'Mercado', value: inst.info.marketName ?? 'N/A' },
       { label: 'Apertura', value: inst.summary.openPrice },
       { label: 'Cierre anterior', value: inst.summary.closePrice },

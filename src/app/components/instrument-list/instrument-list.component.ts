@@ -12,20 +12,29 @@ import { InstrumentService, Instrument } from '../../services/instrument.service
 })
 export class InstrumentListComponent implements OnInit {
   @Input() indexCode: string = 'IPSA';
-
-  /** Emitir instrumento seleccionado al AppComponent */
   @Output() instrumentSelected = new EventEmitter<Instrument>();
 
   instruments = signal<Instrument[]>([]);
+  searchTerm = signal(''); // aquí guardamos el término
+
+  filteredInstruments = computed(() => {
+    const term = this.searchTerm().toLowerCase();
+    if (!term) return this.instruments();
+    return this.instruments().filter(inst =>
+      inst.info.name.toLowerCase().includes(term) ||
+      inst.info.shortName.toLowerCase().includes(term) ||
+      inst.info.codeInstrument.toLowerCase().includes(term)
+    );
+  });
 
   firstHalf = computed(() => {
-    const list = this.instruments();
+    const list = this.filteredInstruments();
     const half = Math.ceil(list.length / 2);
     return list.slice(0, half);
   });
 
   secondHalf = computed(() => {
-    const list = this.instruments();
+    const list = this.filteredInstruments();
     const half = Math.ceil(list.length / 2);
     return list.slice(half);
   });
@@ -36,13 +45,15 @@ export class InstrumentListComponent implements OnInit {
     if (this.indexCode === 'IPSA') {
       const allInstruments = await this.instrumentService.getAllInstrumentsComplete();
       this.instruments.set(allInstruments);
-    } else {
-      this.instruments.set([]);
     }
   }
 
-  /** Se llama desde cada fila de instrumento */
   onInstrumentSelected(inst: Instrument) {
     this.instrumentSelected.emit(inst);
+  }
+
+  /** Método que se llama desde search bar */
+  onSearchChange(term: string) {
+    this.searchTerm.set(term);
   }
 }

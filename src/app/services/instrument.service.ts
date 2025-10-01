@@ -28,6 +28,8 @@ export interface InstrumentSummary {
   pct30D: number;
   pctRelW52: number;
   pctRelCY: number;
+
+  datetimeLastPrice?: string | null; // <-- NUEVO: fecha de cotización
 }
 
 export interface Instrument {
@@ -69,7 +71,6 @@ export class InstrumentService {
     let summaryJson: any = null;
     let history: HistoryPoint[] = [];
 
-    // Intentar cargar resumen, si no existe usar valores por defecto
     try {
       const summaryModule = await import(`../../assets/resumen/${code}.json`);
       summaryJson = summaryModule.data;
@@ -77,7 +78,6 @@ export class InstrumentService {
       console.warn(`Resumen para ${code} no encontrado, usando datos básicos.`);
     }
 
-    // Intentar cargar historial, si no existe usar array vacío
     try {
       const historyModule = await import(`../../assets/history/history-${code}.json`);
       history = historyModule.data.chart ?? [];
@@ -105,6 +105,7 @@ export class InstrumentService {
         pct30D: summaryJson?.price?.pct30D ?? 0,
         pctRelW52: summaryJson?.price?.pctRelW52 ?? 0,
         pctRelCY: summaryJson?.price?.pctRelCY ?? 0,
+        datetimeLastPrice: summaryJson?.price?.datetimeLastPrice ?? null, // <-- NUEVO
       },
       history: history,
     };

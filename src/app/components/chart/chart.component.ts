@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import {
   NgApexchartsModule,
   ApexAxisChartSeries,
@@ -17,7 +17,7 @@ type Period = '1M' | '3M' | '6M' | '1A';
 
 interface HistoryPoint {
   datetimeLastPrice: string;
-  datetimeLastPriceTs: number; // en segundos
+  datetimeLastPriceTs: number;
   lastPrice: number;
 }
 
@@ -34,8 +34,9 @@ interface Instrument {
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss'],
 })
-export class ChartComponent implements OnChanges {
+export class ChartComponent implements OnChanges, AfterViewInit {
   @Input() instrument!: Instrument;
+  @ViewChild('chartContainer') chartContainer!: ElementRef;
 
   selectedPeriod: Period = '6M';
   series: ApexAxisChartSeries = [];
@@ -45,25 +46,20 @@ export class ChartComponent implements OnChanges {
     height: 360,
     animations: { enabled: true },
     toolbar: { show: true },
+    zoom: { enabled: true, type: 'x', autoScaleYaxis: true },
   };
 
   xaxis: ApexXAxis = { type: 'datetime', labels: { datetimeUTC: false, style: { colors: '#f4f4f5' } } };
   yaxis: ApexYAxis = {
     decimalsInFloat: 2,
     labels: { style: { colors: '#f4f4f5' } },
-    axisBorder: { show: true, color: '#444' }, // línea del eje Y
-    axisTicks: { show: true, color: '#444' }   // ticks del eje Y
+    axisBorder: { show: true, color: '#444' },
+    axisTicks: { show: true, color: '#444' }
   };
   dataLabels: ApexDataLabels = { enabled: false };
   stroke: ApexStroke = { curve: 'smooth', width: 2 };
   markers: ApexMarkers = { size: 0 };
-  grid: ApexGrid = {
-    show: true,
-    borderColor: '#333', // color del borde general del grid
-    yaxis: {
-      lines: { show: true } 
-    }
-  };
+  grid: ApexGrid = { show: true, borderColor: '#333', yaxis: { lines: { show: true } } };
   fill: ApexFill = { type: 'solid', opacity: 0.25 };
   tooltip: ApexTooltip = {
     theme: 'dark',
@@ -76,7 +72,26 @@ export class ChartComponent implements OnChanges {
   ngOnChanges(): void {
     if (this.instrument?.history?.length) {
       this.updateSeries();
+    } else {
+      // Si no hay historial, limpiar el chart
+      this.series = [];
     }
+  }
+
+  ngAfterViewInit(): void {
+    if (!this.chartContainer) return;
+
+    const el = this.chartContainer.nativeElement;
+
+    // Bloquea scroll vertical de la página cuando el mouse está sobre el chart
+    el.addEventListener(
+      'wheel',
+      (e: WheelEvent) => {
+        e.preventDefault(); // bloquea scroll de la página
+        // ApexCharts recibe el evento y hace zoom automáticamente
+      },
+      { passive: false } // necesario para que preventDefault funcione
+    );
   }
 
   setPeriod(period: Period) {
@@ -85,7 +100,7 @@ export class ChartComponent implements OnChanges {
   }
 
   private updateSeries() {
-    const points = this.filterByPeriod(this.instrument.history, this.selectedPeriod).map((p) => ({
+    const points = this.filterByPeriod(this.instrument.history, this.selectedPeriod).map(p => ({
       x: p.datetimeLastPriceTs * 1000,
       y: p.lastPrice,
     }));
@@ -97,8 +112,7 @@ export class ChartComponent implements OnChanges {
     if (!data.length) return [];
     const daysMap: Record<Period, number> = { '1M': 30, '3M': 90, '6M': 180, '1A': 365 };
     const days = daysMap[period];
-    const total = data.length;
-    const startIndex = Math.max(total - days, 0);
-    return data.slice(startIndex, total);
+    const startIndex = Math.max(data.length - days, 0);
+    return data.slice(startIndex);
   }
 }

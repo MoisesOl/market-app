@@ -13,3 +13,22 @@
 .variation-neutral {
   color: #9ca3af; // gris
 }
+
+/* Aplica el efecto de hover a toda la fila de la tabla */
+tr {
+  transition: all 0.2s ease;
+  cursor: pointer; /* Cambia el cursor al pasar sobre la fila */
+}
+
+tr:hover {
+  border: 1px solid #00aaff; /* borde visible al apuntar */
+  background-color: rgba(0, 170, 255, 0.1); /* opcional: ligero fondo para resaltar */
+}
+
+
+/* Efecto “click” mientras se presiona */
+tr:active {
+  background-color: rgba(0, 170, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}

@@ -4,8 +4,8 @@
     type="text"
     pInputText
     placeholder="Buscar..."
-    [(ngModel)]="searchTerm"
-    (ngModelChange)="onSearch()"
+    [value]="searchTerm()"
+    (input)="onSearch($event.target.value)"
     class="search-input"
   />
 </div>

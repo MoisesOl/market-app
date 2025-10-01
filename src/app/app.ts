@@ -1,11 +1,11 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { SummaryComponent } from './components/summary/summary.component';
 import { InstrumentService, Instrument, InstrumentInfo } from './services/instrument.service';
-import { InstrumentItemComponent } from './components/instrument-item/instrument-item.component';
 import { InstrumentListComponent } from './components/instrument-list/instrument-list.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +15,8 @@ import { InstrumentListComponent } from './components/instrument-list/instrument
     HeaderComponent,
     ChartComponent,
     SummaryComponent,
-    InstrumentItemComponent,
-    InstrumentListComponent
+    InstrumentListComponent,
+    SearchBarComponent
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
@@ -30,11 +30,11 @@ export class AppComponent {
   /** Tabs: índice activo */
   selectedIndex = signal<'IPSA' | 'IGPA' | 'NASDAQ'>('IPSA');
 
-  constructor(private instrumentService: InstrumentService) {
-    // Cargar lista de instrumentos
-    this.instruments.set(this.instrumentService.getInstrumentList());
+  /** Referencia al componente de lista de instrumentos */
+  @ViewChild('instrumentListRef') instrumentListRef!: InstrumentListComponent;
 
-    // Inicializar primer instrumento automáticamente
+  constructor(private instrumentService: InstrumentService) {
+    this.instruments.set(this.instrumentService.getInstrumentList());
     this.instrumentService.initDefaultInstrument();
   }
 
@@ -43,8 +43,15 @@ export class AppComponent {
     this.selectedIndex.set(index);
   }
 
-  /** Método público para actualizar el instrumento seleccionado desde el template */
+  /** Actualizar instrumento seleccionado */
   onInstrumentSelected(instrument: Instrument) {
     this.instrumentService.selectedInstrument.set(instrument);
+  }
+
+  /** Recibe texto de búsqueda de SearchBar y llama al método de InstrumentListComponent */
+  onSearchChange(term: string) {
+    if (this.instrumentListRef) {
+      this.instrumentListRef.onSearchChange(term);
+    }
   }
 }
