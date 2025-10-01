@@ -1,78 +1,104 @@
-import { Component, Input, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ChartModule } from 'primeng/chart';
-import { ButtonModule } from 'primeng/button';
+import { Component, Input, OnChanges } from '@angular/core';
+import {
+  NgApexchartsModule,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexDataLabels,
+  ApexStroke,
+  ApexXAxis,
+  ApexMarkers,
+  ApexGrid,
+  ApexYAxis,
+  ApexFill,
+  ApexTooltip,
+} from 'ng-apexcharts';
+
+type Period = '1M' | '3M' | '6M' | '1A';
+
+interface HistoryPoint {
+  datetimeLastPrice: string;
+  datetimeLastPriceTs: number; // en segundos
+  lastPrice: number;
+}
+
+interface Instrument {
+  info: { name: string; shortName: string; codeInstrument: string; countryName: string };
+  summary: { lastPrice: number; performanceRelative: number; performanceAbsolute: number };
+  history: HistoryPoint[];
+}
 
 @Component({
   selector: 'app-chart',
   standalone: true,
-  imports: [CommonModule, ChartModule, ButtonModule],
+  imports: [NgApexchartsModule],
   templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.scss']
+  styleUrls: ['./chart.component.scss'],
 })
-export class ChartComponent {
-  @Input() selectedInstrument: { name: string; value: number } | null = null;
+export class ChartComponent implements OnChanges {
+  @Input() instrument!: Instrument;
 
-  currentPeriod = signal<'1M' | '3M' | '6M' | '1A'>('1M');
+  selectedPeriod: Period = '6M';
+  series: ApexAxisChartSeries = [];
 
-  periods = ['1M','3M','6M','1A'] as const;
-
-  chartData = computed(() => {
-    const instrument = this.selectedInstrument;
-    if (!instrument) return { labels: [], datasets: [] };
-    const points = this.generateData(instrument.value, this.currentPeriod());
-    return {
-      labels: points.map((_, i) => i + 1),
-      datasets: [
-        {
-          label: instrument['name'],
-          data: points,
-          fill: true, // activa el relleno bajo la línea
-          backgroundColor: 'rgba(66, 165, 245, 0.2)', // color sólido semitransparente
-          borderColor: '#42A5F5', // color de la línea
-          tension: 0.3 // suaviza la curva
-        }
-      ]
-    };
-  });
-
-  chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: true }
-    },
-    scales: {
-      x: {
-        grid: {
-          display: false 
-        }
-      },
-      y: {
-        grid: {
-          display: true,        // mostrar líneas horizontales
-          color: '#444',        // color de las líneas
-          borderColor: '#888'   // color del borde del eje
-        },
-        ticks: {
-          color: '#eee'         // color de los números del eje Y
-        }
-      }
-    }
+  chart: ApexChart = {
+    type: 'area',
+    height: 360,
+    animations: { enabled: true },
+    toolbar: { show: true },
   };
 
-  setPeriod(period: '1M' | '3M' | '6M' | '1A') {
-    this.currentPeriod.set(period);
+  xaxis: ApexXAxis = { type: 'datetime', labels: { datetimeUTC: false, style: { colors: '#f4f4f5' } } };
+  yaxis: ApexYAxis = {
+    decimalsInFloat: 2,
+    labels: { style: { colors: '#f4f4f5' } },
+    axisBorder: { show: true, color: '#444' }, // línea del eje Y
+    axisTicks: { show: true, color: '#444' }   // ticks del eje Y
+  };
+  dataLabels: ApexDataLabels = { enabled: false };
+  stroke: ApexStroke = { curve: 'smooth', width: 2 };
+  markers: ApexMarkers = { size: 0 };
+  grid: ApexGrid = {
+    show: true,
+    borderColor: '#333', // color del borde general del grid
+    yaxis: {
+      lines: { show: true } 
+    }
+  };
+  fill: ApexFill = { type: 'solid', opacity: 0.25 };
+  tooltip: ApexTooltip = {
+    theme: 'dark',
+    x: { format: 'dd MMM yyyy' },
+    style: { fontSize: '12px', fontFamily: 'Inter, sans-serif' },
+    marker: { show: true },
+    y: { formatter: (val) => `$${val.toFixed(2)}` },
+  };
+
+  ngOnChanges(): void {
+    if (this.instrument?.history?.length) {
+      this.updateSeries();
+    }
   }
 
-  private generateData(baseValue: number, period: string): number[] {
-    let pointsCount = { '1M':20, '3M':60, '6M':120, '1A':250 }[period] || 20;
-    const data: number[] = [];
-    let value = baseValue;
-    for (let i = 0; i < pointsCount; i++) {
-      value += (Math.random()-0.5)*baseValue*0.02;
-      data.push(parseFloat(value.toFixed(2)));
-    }
-    return data;
+  setPeriod(period: Period) {
+    this.selectedPeriod = period;
+    this.updateSeries();
+  }
+
+  private updateSeries() {
+    const points = this.filterByPeriod(this.instrument.history, this.selectedPeriod).map((p) => ({
+      x: p.datetimeLastPriceTs * 1000,
+      y: p.lastPrice,
+    }));
+
+    this.series = [{ name: this.instrument.info.name, data: points }];
+  }
+
+  private filterByPeriod(data: HistoryPoint[], period: Period): HistoryPoint[] {
+    if (!data.length) return [];
+    const daysMap: Record<Period, number> = { '1M': 30, '3M': 90, '6M': 180, '1A': 365 };
+    const days = daysMap[period];
+    const total = data.length;
+    const startIndex = Math.max(total - days, 0);
+    return data.slice(startIndex, total);
   }
 }

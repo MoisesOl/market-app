@@ -1,17 +1,21 @@
 <div class="chart-wrapper">
-  <div class="chart-container">
-    <p-chart type="line" [data]="chartData()" [options]="chartOptions"></p-chart>
+  <div class="periods">
+    <button class="period-btn" [class.active]="selectedPeriod==='1M'" (click)="setPeriod('1M')">1M</button>
+    <button class="period-btn" [class.active]="selectedPeriod==='3M'" (click)="setPeriod('3M')">3M</button>
+    <button class="period-btn" [class.active]="selectedPeriod==='6M'" (click)="setPeriod('6M')">6M</button>
+    <button class="period-btn" [class.active]="selectedPeriod==='1A'" (click)="setPeriod('1A')">1A</button>
   </div>
 
-  <div class="period-buttons">
-    <button
-      pButton
-      *ngFor="let period of periods"
-      type="button"
-      (click)="setPeriod(period)"
-      [class.active]="currentPeriod() === period"
-    >
-      {{ period }}
-    </button>
-  </div>
+  <apx-chart
+    [series]="series"
+    [chart]="chart"
+    [xaxis]="xaxis"
+    [yaxis]="yaxis"
+    [dataLabels]="dataLabels"
+    [stroke]="stroke"
+    [markers]="markers"
+    [grid]="grid"
+    [fill]="fill"
+    [tooltip]="tooltip"
+  ></apx-chart>
 </div>

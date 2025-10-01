@@ -1,0 +1,63 @@
+.summary-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;      /* ocupa todo el ancho del contenedor padre */
+    border-radius: 8px;
+    color: #f4f4f5;
+    font-size: 14px;
+}
+
+.summary-title {
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+    margin: 0.25rem 0;
+    color: #f4f4f5;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.25rem;
+}
+
+.summary-table {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.25rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+
+  &:hover {
+        background-color: #2c2c2c;
+  }
+}
+
+.summary-key {
+    text-align: left;
+}
+
+.summary-value {
+    text-align: right;
+}
+
+.variation-positive {
+  color: #4ade80; // verde
+}
+
+.variation-negative {
+  color: #f87171; // rojo
+}
+
+.variation-neutral {
+  color: #9ca3af; // gris
+}
+
+
+/* Responsive: apilar debajo del chart si <1200px */
+@media (max-width: 1200px) {
+    .summary-wrapper {
+        margin-top: 3rem;
+    }
+}

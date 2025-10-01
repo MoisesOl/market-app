@@ -1,0 +1,15 @@
+:host {
+  display: contents; /* Permite que el <tr> interno se alinee correctamente dentro del <tbody> */
+}
+
+.variation-positive {
+  color: #4ade80;
+}
+
+.variation-negative {
+  color: #f87171; // rojo
+}
+
+.variation-neutral {
+  color: #9ca3af; // gris
+}

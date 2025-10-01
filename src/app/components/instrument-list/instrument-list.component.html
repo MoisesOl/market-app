@@ -1,3 +1,55 @@
-<div *ngFor="let instrument of instruments">
-  {{ instrument.name }} - {{ instrument.value | number:'1.2-2' }}
+<div class="instrument-tables-container">
+
+  <!-- Primera mitad -->
+  <div class="instrument-table-half">
+    <table class="instrument-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Último</th>
+          <th>Var. Día</th>
+          <th>Var. % Día</th>
+          <th>Var. 30 días</th>
+          <th>Año a la fecha</th>
+          <th>Max diario</th>
+          <th>Min diario</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let inst of firstHalf()">
+          <app-instrument-item
+            [instrument]="inst"
+            (instrumentSelected)="onInstrumentSelected($event)">
+          </app-instrument-item>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Segunda mitad -->
+  <div class="instrument-table-half">
+    <table class="instrument-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Último</th>
+          <th>Var. Día</th>
+          <th>Var. % Día</th>
+          <th>Var. 30 días</th>
+          <th>Año a la fecha</th>
+          <th>Max diario</th>
+          <th>Min diario</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let inst of secondHalf()">
+          <app-instrument-item
+            [instrument]="inst"
+            (instrumentSelected)="onInstrumentSelected($event)">
+          </app-instrument-item>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
 </div>

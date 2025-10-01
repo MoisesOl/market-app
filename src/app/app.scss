@@ -1,0 +1,138 @@
+.centered-container {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centra horizontalmente todo */
+}
+
+/* Contenedor de chart + summary */
+.chart-summary-container {
+  display: flex;
+  flex-direction: column; /* mobile default: apilado */
+  gap: 1rem;
+  width: 95%; /* ocupa casi todo el ancho disponible */
+}
+
+/* Chart ocupa más espacio */
+.chart-summary-container app-chart {
+  flex: 7; /* 70% en desktop */
+  width: 100%;
+}
+
+/* Summary ocupa menos espacio */
+.chart-summary-container app-summary {
+  flex: 3; /* 30% en desktop */
+  width: 100%;
+}
+
+.instrument-list-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #1f1f1f;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.instrument-list-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.instrument-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.instrument-table th,
+.instrument-table td {
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+
+.instrument-table th {
+  background: #2a2a2a;
+  color: #ccc;
+  font-weight: 600;
+}
+
+.instrument-row {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.instrument-row:hover {
+  background: #333;
+}
+
+.variation-positive {
+  color: #4caf50;
+}
+
+.variation-negative {
+  color: #f44336;
+}
+
+.variation-neutral {
+  color: #ccc;
+}
+
+
+
+/* Contenedor de botones de periodo */
+.periods {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+/* Botones de periodo */
+.period-btn {
+  padding: 8px 14px;       /* ligeramente más grandes */
+  font-size: 14px;
+  background: #1f1f1f;
+  color: #f4f4f5;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  user-select: none;
+  min-width: 60px;         /* asegura tamaño uniforme */
+  text-align: center;
+}
+
+.period-btn:hover {
+  background: #2c2c2c;
+  transform: translateY(-1px);
+}
+
+.period-btn:focus {
+  outline: none;
+  border-color: #888;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.period-btn.active {
+  background: #333;
+  border-color: #777;
+  font-weight: 600;
+}
+
+
+
+/* Desktop layout */
+@media (min-width: 1200px) {
+  .chart-summary-container {
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  .chart-summary-container app-chart {
+    width: 70%; /* chart 70% */
+  }
+
+  .chart-summary-container app-summary {
+    width: 30%; /* summary 30% */
+  }
+}

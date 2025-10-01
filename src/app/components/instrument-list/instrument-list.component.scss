@@ -1,0 +1,39 @@
+.instrument-tables-container {
+  display: flex;
+  flex-wrap: wrap; /* permite apilar tablas */
+  gap: 16px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.instrument-table-half {
+  flex: 1 1 48%; /* ancho base 48%, permite crecer/encoger */
+  min-width: 300px;
+}
+
+.instrument-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: auto;
+}
+
+.instrument-table th,
+.instrument-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.instrument-table th {
+  font-weight: bold;
+  text-align: left;
+}
+
+/* Responsive: cuando la pantalla es menor a 1050px */
+@media (max-width: 1050px) {
+  .instrument-table-half {
+    flex: 1 1 100%; /* fuerza que la segunda tabla pase debajo */
+    min-width: 0;
+  }
+}

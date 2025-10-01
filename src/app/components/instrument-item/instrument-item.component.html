@@ -1,1 +1,16 @@
-{{ instrument.name }} - {{ instrument['value'] | number:'1.2-2' }}
+<tr (click)="selectInstrument()">
+  <td>{{ instrument.info.shortName }}</td>
+  <td>{{ instrument.summary.lastPrice | number:'1.2-2' }}</td>
+  <td>{{ instrument.summary.performanceAbsolute | number:'1.2-2' }}</td>
+  <td [ngClass]="getVariationColor(instrument.summary.performanceRelative)">
+    {{ (instrument.summary.performanceRelative) | number:'1.2-2' }}%
+  </td>
+  <td [ngClass]="getVariationColor(instrument.summary.pct30D)">
+    {{ (instrument.summary.pct30D) | number:'1.2-2' }}%
+  </td>
+  <td [ngClass]="getVariationColor(instrument.summary.pctRelCY)">
+    {{ (instrument.summary.pctRelCY) | number:'1.2-2' }}%
+  </td>
+  <td>{{ instrument.summary.maxDay | number:'1.2-2' }}</td>
+  <td>{{ instrument.summary.minDay | number:'1.2-2' }}</td>
+</tr>

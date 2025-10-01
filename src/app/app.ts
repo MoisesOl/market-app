@@ -1,39 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
-import { SearchBarComponent } from './components/search-bar/search-bar.component';
-import { TabComponent } from './components/tab/tab.component';
-import { SummaryComponent } from './components/summary/summary.component';
-import { InstrumentListComponent } from './components/instrument-list/instrument-list.component';
 import { ChartComponent } from './components/chart/chart.component';
+import { SummaryComponent } from './components/summary/summary.component';
+import { InstrumentService, Instrument, InstrumentInfo } from './services/instrument.service';
+import { InstrumentItemComponent } from './components/instrument-item/instrument-item.component';
+import { InstrumentListComponent } from './components/instrument-list/instrument-list.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule,
-    SearchBarComponent,
     HeaderComponent,
     ChartComponent,
-    TabComponent,
     SummaryComponent,
+    InstrumentItemComponent,
     InstrumentListComponent
   ],
   templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  styleUrls: ['./app.scss'],
 })
 export class AppComponent {
-  selectedInstrument = {
-    name: 'Instrumento Ejemplo',
-    country: 'Chile',
-    value: 123.45,
-    changePercentage: -0.78,
-    changePoints: -51.01
-  };
+  instruments = signal<InstrumentInfo[]>([]);
 
-  instruments = [
-    { name: 'Instrumento 1', value: 100, change: 0.5, volume: 500 },
-    { name: 'Instrumento 2', value: 200, change: -1.2, volume: 300 },
-    { name: 'Instrumento 3', value: 150, change: 0.8, volume: 800 }
-  ];
+  /** Signal global del instrumento seleccionado */
+  selectedInstrument = computed(() => this.instrumentService.selectedInstrument());
+
+  /** Tabs: índice activo */
+  selectedIndex = signal<'IPSA' | 'IGPA' | 'NASDAQ'>('IPSA');
+
+  constructor(private instrumentService: InstrumentService) {
+    // Cargar lista de instrumentos
+    this.instruments.set(this.instrumentService.getInstrumentList());
+
+    // Inicializar primer instrumento automáticamente
+    this.instrumentService.initDefaultInstrument();
+  }
+
+  /** Cambiar índice activo */
+  setIndex(index: 'IPSA' | 'IGPA' | 'NASDAQ') {
+    this.selectedIndex.set(index);
+  }
+
+  /** Método público para actualizar el instrumento seleccionado desde el template */
+  onInstrumentSelected(instrument: Instrument) {
+    this.instrumentService.selectedInstrument.set(instrument);
+  }
 }

@@ -1,46 +1,93 @@
-
-
 .chart-wrapper {
   display: flex;
   flex-direction: column;
-  max-width: 70%; /* máximo 70% de la pantalla en escritorio */
-  margin-left: 2rem;
+  width: 100%; /* ocupa todo el espacio del contenedor padre */
 }
 
-.chart-container {
-  width: 100%;
-  flex: 1;
-}
-
-.period-buttons {
+/* Contenedor de botones de periodo */
+.periods {
   display: flex;
-  gap: 0; /* botones pegados */
-  margin-top: 0.5rem;
+  gap: 4px;
+  margin-bottom: 12px;
 }
 
-.period-buttons button {
-  width: 60px; /* ancho fijo */
-  border: 1px solid #3b3b3b;
-  background-color: #1f1f1f;
-  color: #eee;
+/* Botones de periodo */
+.period-btn {
+  padding: 8px 14px;       /* ligeramente más grandes */
+  font-size: 14px;
+  background: #1f1f1f;
+  color: #f4f4f5;
+  border: 1px solid #555;
+  border-radius: 4px;
   cursor: pointer;
-  padding: 0.5rem 0;
-  transition: background-color 0.2s;
+  transition: background 0.2s, transform 0.1s;
+  user-select: none;
+  min-width: 60px;         /* asegura tamaño uniforme */
+  text-align: center;
 }
 
-.period-buttons button:hover {
-  background-color: #333; /* un poco más claro al hover */
+.period-btn:hover {
+  background: #2c2c2c;
+  transform: translateY(-1px);
 }
 
-.period-buttons button.active {
-  background-color: #42a5f5;
-  color: #fff;
+.period-btn:focus {
+  outline: none;
+  border-color: #888;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
 }
 
+.period-btn.active {
+  background: #333;
+  border-color: #777;
+  font-weight: 600;
+}
 
-/* Responsive: en móviles ocupa 100% */
-@media (max-width: 1024px) {
-  .chart-wrapper {
-    max-width: 100%;
+/* ApexChart */
+apx-chart {
+  width: 100%;
+  height: 400px;
+}
+
+/* Toolbar oscuro */
+.apexcharts-toolbar {
+  background: #1f1f1f !important;
+  border: 1px solid #555 !important;
+  border-radius: 4px;
+
+  button {
+    color: #f4f4f5 !important;
+  }
+}
+
+/* Menú del chart */
+::ng-deep .apexcharts-menu {
+  background-color: #1f1f1f !important;
+  border: 1px solid #333 !important;
+  border-radius: 6px;
+  padding: 0.25rem 0;
+}
+
+::ng-deep .apexcharts-menu .apexcharts-menu-item {
+  color: #f4f4f5 !important;
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+::ng-deep .apexcharts-menu .apexcharts-menu-item:hover {
+  background-color: #333 !important;
+  color: #fff !important;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  apx-chart {
+    height: 300px;
+  }
+
+  .period-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+    min-width: 50px;
   }
 }

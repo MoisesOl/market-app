@@ -1,8 +1,23 @@
-<div *ngIf="selectedInstrument" class="card p-3 mb-4">
-  <h5>{{ selectedInstrument.name }}</h5>
-  <p>Precio: {{ selectedInstrument.value | number:'1.2-2' }}</p>
-  <p [class.text-success]="selectedInstrument.change >= 0" [class.text-danger]="selectedInstrument.change < 0">
-    Cambio: {{ selectedInstrument.change | number:'1.2-2' }}%
-  </p>
-  <p>Volumen: {{ selectedInstrument.volume | number }}</p>
+<div class="summary-wrapper" *ngIf="instrument()">
+  <!-- Título centrado -->
+  <h3 class="summary-title">Detalles</h3>
+
+  <!-- Tabla de datos de mercado -->
+  <div class="summary-table">
+    <div class="summary-row" *ngFor="let item of marketData()">
+      <span>{{ item.label }}</span>
+      <span>{{ formatValue(item.value) }}</span>
+    </div>
+  </div>
+
+  <!-- Variación -->
+  <h3 class="summary-title">Variación</h3>
+  <div class="summary-table">
+    <div class="summary-row" *ngFor="let item of variationData()">
+      <span>{{ item.label }}</span>
+      <span [ngClass]="getVariationColor(item.raw)">
+        {{ formatValue(item.value, true) }}
+      </span>
+    </div>
+  </div>
 </div>

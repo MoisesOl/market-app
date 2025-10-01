@@ -1,10 +1,43 @@
-<div class="container mt-5">
-  <app-search-bar></app-search-bar>
-  <app-header [selectedInstrument]="selectedInstrument"></app-header>
-  <app-chart [selectedInstrument]="selectedInstrument"></app-chart>
-  <!-- Componentes ocultos temporalmente 
-  <app-tab *ngIf="false" [tabs]="['Tab 1', 'Tab 2']" [filteredContent]="['Contenido 1', 'Contenido 2']"></app-tab>
-  <app-summary *ngIf="false" [selectedInstrument]="selectedInstrument"></app-summary>
-  <app-instrument-list *ngIf="false" [instruments]="instruments"></app-instrument-list>
-  -->
+<!-- Header solo si hay instrumento -->
+<div class="header-container">
+  <app-header 
+    [selectedInstrumentSignal]="selectedInstrument()">
+  </app-header>
+</div>
+
+<!-- Contenedor chart + summary -->
+<div class="centered-container">
+  <div class="chart-summary-container">
+    <app-chart *ngIf="selectedInstrument()" 
+               [instrument]="selectedInstrument()!">
+    </app-chart>
+
+    <app-summary *ngIf="selectedInstrument()" 
+                 [instrumentSignal]="selectedInstrument()">
+    </app-summary>
+  </div>
+</div>
+
+<!-- Tabs estilo Chart -->
+<div class="periods tabs-container">
+  <button class="period-btn" [class.active]="selectedIndex() === 'IPSA'" (click)="setIndex('IPSA')">IPSA</button>
+  <button class="period-btn" [class.active]="selectedIndex() === 'IGPA'" (click)="setIndex('IGPA')">IGPA</button>
+  <button class="period-btn" [class.active]="selectedIndex() === 'NASDAQ'" (click)="setIndex('NASDAQ')">NASDAQ</button>
+</div>
+
+<!-- Contenido de cada índice -->
+<div class="index-content">
+  <app-instrument-list
+    *ngIf="selectedIndex() === 'IPSA'"
+    [indexCode]="'IPSA'"
+    (instrumentSelected)="onInstrumentSelected($event)">
+  </app-instrument-list>
+
+  <div *ngIf="selectedIndex() === 'IGPA'" class="empty-index">
+    <p>No hay datos para IGPA</p>
+  </div>
+
+  <div *ngIf="selectedIndex() === 'NASDAQ'" class="empty-index">
+    <p>No hay datos para NASDAQ</p>
+  </div>
 </div>
