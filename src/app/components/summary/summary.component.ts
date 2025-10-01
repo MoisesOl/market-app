@@ -31,7 +31,7 @@ export class SummaryComponent implements OnChanges {
         ? `${num.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`
         : num.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
-    return value; // deja strings tal cual
+    return value;
   }
 
   /** Formatea la fecha de cotización */

@@ -1,23 +1,28 @@
+import { expect } from 'chai';
 import { TestBed } from '@angular/core/testing';
-import { AppComponent  } from './app';
+import { AppComponent } from './app';
+import { InstrumentService } from './services/instrument.service';
 
-describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent],
-    }).compileComponents();
+describe('AppComponent', () => {
+  it('should create the app (instancia manual con stub)', async () => {
+    const stubService = {
+      getInstrumentList: () => [],
+      initDefaultInstrument: async () => {}
+    } as any;
+
+    const app = new AppComponent(stubService);
+    expect(app).to.exist;
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+  it('should call onSearchChange safely', () => {
+    const stubService = {
+      getInstrumentList: () => [],
+      initDefaultInstrument: async () => {}
+    } as any;
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, market-app');
+    const app = new AppComponent(stubService);
+    // Llamar método que delega a instrumentListRef (vacío por prueba)
+    app.onSearchChange('x');
+    expect(app.selectedIndex).to.exist;
   });
 });

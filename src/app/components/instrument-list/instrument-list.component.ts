@@ -15,7 +15,7 @@ export class InstrumentListComponent implements OnInit {
   @Output() instrumentSelected = new EventEmitter<Instrument>();
 
   instruments = signal<Instrument[]>([]);
-  searchTerm = signal(''); // aquí guardamos el término
+  searchTerm = signal('');
 
   filteredInstruments = computed(() => {
     const term = this.searchTerm().toLowerCase();

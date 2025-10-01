@@ -29,7 +29,7 @@ export interface InstrumentSummary {
   pctRelW52: number;
   pctRelCY: number;
 
-  datetimeLastPrice?: string | null; // <-- NUEVO: fecha de cotización
+  datetimeLastPrice?: string | null;
 }
 
 export interface Instrument {
